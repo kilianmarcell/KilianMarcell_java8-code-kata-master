@@ -4,6 +4,7 @@ import common.test.tool.annotation.Easy;
 import common.test.tool.dataset.ClassicOnlineStore;
 import common.test.tool.entity.Customer;
 
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.util.*;
@@ -69,7 +70,8 @@ public class Exercise5Test extends ClassicOnlineStore {
          * Get the oldest customer by using {@link Collectors#maxBy}.
          * Don't use any intermediate operations.
          */
-        Optional<Customer> oldestCustomer = null;
+        Optional<Customer> oldestCustomer = customerList.stream()
+                .collect(Collectors.maxBy(Comparator.comparing(Customer::getAge)));
 
         assertThat(oldestCustomer.get(), is(customerList.get(3)));
     }
@@ -82,7 +84,8 @@ public class Exercise5Test extends ClassicOnlineStore {
          * Create a map of age as key and number of customers as value
          * using {@link Collectors#groupingBy} and {@link Collectors#counting}
          */
-        Map<Integer, Long> ageDistribution = null;
+        Map<Integer, Long> ageDistribution = customerList.stream()
+                .collect(Collectors.groupingBy(Customer::getAge, Collectors.counting()));
 
         assertThat(ageDistribution.size(), is(9));
         ageDistribution.forEach((k, v) -> {
